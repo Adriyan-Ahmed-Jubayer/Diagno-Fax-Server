@@ -30,6 +30,8 @@ async function run() {
     const TestCollection = client.db('DiagnoDB').collection('Tests')
     const UsersCollection = client.db('DiagnoDB').collection('Users')
     const BookingCollection = client.db('DiagnoDB').collection('Booked');
+    const UpozilasCollection = client.db('DiagnoDB').collection('Upozilas');
+    const DistrictsCollection = client.db('DiagnoDB').collection('Districts');
 
     app.get('/tests', async(req, res) => {
         const result = await TestCollection.find().toArray();
@@ -41,13 +43,21 @@ async function run() {
         const result = await TestCollection.findOne(query);
         res.send(result);
     })
+    app.get('/districts', async(req, res) => {
+      const result = await DistrictsCollection.find().toArray();
+      res.send(result)
+    })
+    app.get('/upozilas', async(req, res) => {
+      const result = await UpozilasCollection.find().toArray();
+      res.send(result)
+    })
     app.post('/booked', async(req, res) => {
       const Test = req.body;
       const result = await BookingCollection.insertOne(Test)
       res.send(result);
     })
     app.post('/users', async(req, res) => {
-      const user = req.boby;
+      const user = req.body;
       const result = await UsersCollection.insertOne(user);
       res.send(result);
     })
@@ -59,6 +69,7 @@ async function run() {
         query = { _id: new ObjectId(req.query.id) };
         updatedItem = { $inc: { available_slots: -1 }};
       }
+      console.log(req.query.id);
       const result = await TestCollection.findOneAndUpdate(query, updatedItem);
       res.send(result);
     })
