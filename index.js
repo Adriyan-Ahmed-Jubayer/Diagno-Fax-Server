@@ -14,6 +14,7 @@ app.get("/", (req, res) => {
 //---------------------------------
 
 const uri = `mongodb+srv://${process.env.DB_NAME}:${process.env.DB_PASS}@cluster0.y6otyph.mongodb.net/?retryWrites=true&w=majority`;
+// const uri = `mongodb+srv://${process.env.DB_NAME}:${process.env.DB_PASS}@cluster0.y6otyph.mongodb.net/?retryWrites=true&w=majority`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
@@ -27,6 +28,7 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     const TestCollection = client.db('DiagnoDB').collection('Tests')
+    const UsersCollection = client.db('DiagnoDB').collection('Users')
     const BookingCollection = client.db('DiagnoDB').collection('Booked');
 
     app.get('/tests', async(req, res) => {
@@ -42,6 +44,22 @@ async function run() {
     app.post('/booked', async(req, res) => {
       const Test = req.body;
       const result = await BookingCollection.insertOne(Test)
+      res.send(result);
+    })
+    app.post('/users', async(req, res) => {
+      const user = req.boby;
+      const result = await UsersCollection.insertOne(user);
+      res.send(result);
+    })
+
+    app.put('/booked', async(req, res) => {
+      let query = {};
+      let updatedItem = {};
+      if (req.query.id) {
+        query = { _id: new ObjectId(req.query.id) };
+        updatedItem = { $inc: { available_slots: -1 }};
+      }
+      const result = await TestCollection.findOneAndUpdate(query, updatedItem);
       res.send(result);
     })
 
