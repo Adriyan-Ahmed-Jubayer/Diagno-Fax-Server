@@ -27,6 +27,7 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     const TestCollection = client.db('DiagnoDB').collection('Tests')
+    const BookingCollection = client.db('DiagnoDB').collection('Booked');
 
     app.get('/tests', async(req, res) => {
         const result = await TestCollection.find().toArray();
@@ -37,6 +38,11 @@ async function run() {
       const query = { _id: new ObjectId(id) };
         const result = await TestCollection.findOne(query);
         res.send(result);
+    })
+    app.post('/booked', async(req, res) => {
+      const Test = req.body;
+      const result = await BookingCollection.insertOne(Test)
+      res.send(result);
     })
 
     await client.connect();
