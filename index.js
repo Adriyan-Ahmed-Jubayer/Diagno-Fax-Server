@@ -52,7 +52,12 @@ async function run() {
       res.send(result)
     })
     app.get('/booked', async(req, res) => {
-      const result = await BookingCollection.find().toArray();
+      let query = {} 
+      const email = req?.query?.email;
+      if(email){
+        query = {email: email}
+      }
+      const result = await BookingCollection.find(query).toArray();
       res.send(result);
     })
     app.post('/booked', async(req, res) => {
@@ -73,7 +78,6 @@ async function run() {
         query = { _id: new ObjectId(req.query.id) };
         updatedItem = { $inc: { available_slots: -1 }};
       }
-      console.log(req.query.id);
       const result = await TestCollection.findOneAndUpdate(query, updatedItem);
       res.send(result);
     })
