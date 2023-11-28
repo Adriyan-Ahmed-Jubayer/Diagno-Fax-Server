@@ -81,6 +81,12 @@ async function run() {
       const result = await TestCollection.findOneAndUpdate(query, updatedItem);
       res.send(result);
     })
+    app.delete("/booked", async (req, res) => {
+      const id = req.query.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await BookingCollection.deleteOne(query);
+      res.send(result);
+    });
 
     await client.connect();
     await client.db("admin").command({ ping: 1 });
