@@ -51,6 +51,15 @@ async function run() {
       const result = await UpozilasCollection.find().toArray();
       res.send(result)
     })
+    app.get('/user', async(req, res) => {
+      let query = {};
+      const email = req?.query?.email;
+      if(email){
+        query = { email: email};
+      }
+      const result = await UsersCollection.findOne(query)
+      res.send(result)
+    })
     app.get('/booked', async(req, res) => {
       let query = {} 
       const email = req?.query?.email;
