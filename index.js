@@ -51,6 +51,10 @@ async function run() {
       const result = await UpozilasCollection.find().toArray();
       res.send(result)
     })
+    app.get('/booked', async(req, res) => {
+      const result = await BookingCollection.find().toArray();
+      res.send(result);
+    })
     app.post('/booked', async(req, res) => {
       const Test = req.body;
       const result = await BookingCollection.insertOne(Test)
