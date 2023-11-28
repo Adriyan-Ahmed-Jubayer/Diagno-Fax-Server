@@ -90,6 +90,24 @@ async function run() {
       const result = await TestCollection.findOneAndUpdate(query, updatedItem);
       res.send(result);
     })
+    app.put("/user", async (req, res) => {
+      const id = req.query.id;
+      const user = req.body;
+      const query = { _id: new ObjectId(id) };
+      const option = { upsert: true };
+      const UpdatedUser = {
+        $set: {
+          name: user.name,
+          email: user.email,
+          blood_group: user.blood_group,
+          district: user.district,
+          upozila: user.upozila,
+          image: user.image
+        },
+      };
+      const result = await UsersCollection.updateOne(query, UpdatedUser, option);
+      res.send(result);
+    });
     app.delete("/booked", async (req, res) => {
       const id = req.query.id;
       const query = { _id: new ObjectId(id) };
