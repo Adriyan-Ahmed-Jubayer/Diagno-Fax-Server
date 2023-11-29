@@ -51,7 +51,11 @@ async function run() {
       const result = await UpozilasCollection.find().toArray();
       res.send(result)
     })
-    app.get('/user', async(req, res) => {
+    app.get('/users', async(req, res) => {
+      const result = await UsersCollection.find().toArray();
+      res.send(result)
+    })
+    app.get('/single/user', async(req, res) => {
       let query = {};
       const email = req?.query?.email;
       if(email){
@@ -108,6 +112,19 @@ async function run() {
       const result = await UsersCollection.updateOne(query, UpdatedUser, option);
       res.send(result);
     });
+    app.put("/admin/users", async(req, res) => {
+      const id = req.query.id;
+      const query = { _id: new ObjectId(id) };
+      const option = { upsert: true };
+       const admin = 'admin';
+       const UpdateRole = {
+        $set: {
+          role: admin
+        }
+       }
+       const result = await UsersCollection.updateOne(query, UpdateRole, option);
+       res.send(result)
+    })
     app.delete("/booked", async (req, res) => {
       const id = req.query.id;
       const query = { _id: new ObjectId(id) };
