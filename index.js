@@ -125,6 +125,19 @@ async function run() {
        const result = await UsersCollection.updateOne(query, UpdateRole, option);
        res.send(result)
     })
+    app.put("/status/users", async(req, res) => {
+      const id = req.query.id;
+      const updatedItem = req.body
+      const query = { _id: new ObjectId(id) };
+      const option = { upsert: true };
+       const UpdateRole = {
+        $set: {
+          status: updatedItem.UserStatus
+        }
+       }
+       const result = await UsersCollection.updateOne(query, UpdateRole, option);
+       res.send(result)
+    })
     app.delete("/booked", async (req, res) => {
       const id = req.query.id;
       const query = { _id: new ObjectId(id) };
