@@ -32,6 +32,8 @@ async function run() {
     const BookingCollection = client.db('DiagnoDB').collection('Booked');
     const UpozilasCollection = client.db('DiagnoDB').collection('Upozilas');
     const DistrictsCollection = client.db('DiagnoDB').collection('Districts');
+    const RecomOneCollection = client.db('DiagnoDB').collection('RecomOne');
+    const RecomTwoCollection = client.db('DiagnoDB').collection('RecomTwo');
 
     app.get('/tests', async(req, res) => {
         const result = await TestCollection.find().toArray();
@@ -49,6 +51,14 @@ async function run() {
     })
     app.get('/upozilas', async(req, res) => {
       const result = await UpozilasCollection.find().toArray();
+      res.send(result)
+    })
+    app.get('/recom-one', async(req, res) => {
+      const result = await RecomOneCollection.find().toArray();
+      res.send(result)
+    })
+    app.get('/recom-2', async(req, res) => {
+      const result = await RecomTwoCollection.find().toArray();
       res.send(result)
     })
     app.get('/users', async(req, res) => {
